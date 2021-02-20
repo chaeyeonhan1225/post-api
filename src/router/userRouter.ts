@@ -16,6 +16,21 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 });
+
+router.get('/token', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    console.log('test');
+    const token = req.headers.authorization as string;
+    console.log(token);
+    const email = jwt.verify(token, 'secretkey');
+    console.log(email);
+    res.json(email);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = Number(req.params.id);

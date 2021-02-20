@@ -21,6 +21,7 @@ export class UserService {
   }
   async join(userInput: UserInput): Promise<UserType> {
     const { email } = userInput;
+    console.log(userInput);
     const exUser = await this.userRepository.findByEmail(email);
     if (exUser) {
       throw new Error('이미 존재하는 회원입니다!');
