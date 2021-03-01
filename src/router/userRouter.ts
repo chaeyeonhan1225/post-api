@@ -20,7 +20,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 router.get('/token', async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log('test');
-    const token = req.headers.authorization as string;
+    const token = req.headers.authorization || '';
     console.log(token);
     const email = jwt.verify(token, 'secretkey');
     console.log(email);

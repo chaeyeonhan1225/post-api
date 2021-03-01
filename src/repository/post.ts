@@ -1,4 +1,4 @@
-import { ResultSetHeader } from 'mysql2/promise';
+import { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { dbPool } from './dbPool';
 
 export interface PostType {
@@ -38,22 +38,22 @@ export class PostRepository {
     return post;
   }
   // Post 생성
-  async create(input: PostInputType): Promise<ResultSetHeader> {
-    const [result] = await this.pool.execute('INSERT INTO Post (title, content, userId) VALUES(?)', [
+  async create(input: PostInputType): Promise<PostType> {
+    const [result]: [ResultSetHeader] = await this.pool.execute('INSERT INTO Post (title, content, userId) VALUES(?)', [
       input.title,
       input.content,
       input.userId,
     ]);
-    return result;
+    return await this.findById(result.insertId);
   }
   // Post 수정
-  async update(input: PostUpdateType): Promise<ResultSetHeader> {
-    const [result] = await this.pool.execute('UPDATE Post SET title = ?, content = ? WHERE id = ?', [
+  async update(input: PostUpdateType): Promise<PostType> {
+    const [result]: [ResultSetHeader] = await this.pool.execute('UPDATE Post SET title = ?, content = ? WHERE id = ?', [
       input.title,
       input.content,
       input.id,
     ]);
-    return result;
+    return await this.findById(result.insertId);
   }
   // Post 삭제
   async delete(id: number): Promise<ResultSetHeader> {
