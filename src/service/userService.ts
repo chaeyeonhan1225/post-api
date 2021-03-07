@@ -28,7 +28,7 @@ export class UserService {
       throw new Error('이미 존재하는 회원입니다!');
     }
     // 유저를 만들어준다.
-    const password = await bcrypt.hash(param.password, 'hash');
+    const password = await bcrypt.hash(param.password, 12);
     const user = {
       email: param.email,
       password: password,
