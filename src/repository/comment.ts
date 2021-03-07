@@ -39,18 +39,21 @@ export class CommentRepository {
   async findAllByUserId(userId: number): Promise<CommentType[]> {
     return await this.pool.execute('SELECT * FROM Comment WHERE userId = ?', [userId]);
   }
-  async create(input: CommentInputType): Promise<ResultSetHeader> {
+  async create(param: CommentInputType): Promise<ResultSetHeader> {
     const [result] = await this.pool.execute('INSERT INTO Comment (title, content, postId, userId) VALUES (?)', [
-      input,
+      param,
     ]);
     return result;
   }
-  async update(input: CommentUpdateInputType): Promise<ResultSetHeader> {
-    const [result] = await this.pool.execute('UPDATE Comment SET content = ? WHERE id = ?', [input.content, input.id]);
-    return result;
+  async update(param: CommentUpdateInputType): Promise<CommentType> {
+    const [result]: RowDataPacket[0] = await this.pool.execute('UPDATE Comment SET content = ? WHERE id = ?', [
+      param.content,
+      param.id,
+    ]);
+    return await this.findById(result.insertId);
   }
-  async delete(id: number): Promise<ResultSetHeader> {
+  async delete(id: number): Promise<boolean> {
     const [result] = await this.pool.execute('UPDATE Comment SET status = ? WHERE id = ?', ['DELETED', id]);
-    return result;
+    return true;
   }
 }

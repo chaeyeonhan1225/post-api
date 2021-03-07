@@ -7,7 +7,18 @@ const router: Router = express.Router();
 
 const userService = new UserService();
 
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+function isLoggedIn(req: Request, res: Response, next: NextFunction) {
+  const token = req.headers['authorization'];
+  console.log(token);
+  if (token) {
+    next();
+  } else {
+    res.status(403).json({
+      message: '로그인이 필요합니다.',
+    });
+  }
+}
+router.get('/', isLoggedIn, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await userService.findAll();
     res.json(users);

@@ -56,8 +56,8 @@ export class PostRepository {
     return await this.findById(result.insertId);
   }
   // Post 삭제
-  async delete(id: number): Promise<ResultSetHeader> {
+  async delete(id: number): Promise<boolean> {
     const [result] = await this.pool.execute('UPDATE Post SET status = ? WHERE id = ?', ['DELETED', id]);
-    return result;
+    return true;
   }
 }

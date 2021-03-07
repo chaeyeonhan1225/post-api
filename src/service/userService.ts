@@ -26,6 +26,7 @@ export class UserService {
     if (exUser) {
       throw new Error('이미 존재하는 회원입니다!');
     }
+    // 유저를 만들어준다.
     const result = await this.userRepository.create(userInput);
     console.log(result);
     const newUser = await this.userRepository.findById(result.insertId);
