@@ -39,8 +39,9 @@ export class UserService {
     const newUser = await this.userRepository.findById(result.insertId);
     return newUser;
   }
-  // 회원가입 처리해야됨
-  // async join(user) {
-  //   // 이메일 유효 한지 검사
-  // }
+  async login(param: UserInput, token: string) {
+    if (!token) {
+      // UnAutorized 에러 추가
+    }
+  }
 }
